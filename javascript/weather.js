@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 // ============================================================
 // API Key
@@ -7,90 +7,108 @@
 // on how to get one.
 // ============================================================
 
-const APIKEY = 'YOUR_API_KEY_HERE'
+const APIKEY = '67c48556ba0c7fa6a4cc1140250f1ec6';
 
 // ============================================================
 // Select DOM Elements
 // ============================================================
 
 // Search
-let area = document.querySelector('#area').value || 'Boston'
-const locationSearch = document.querySelector('#location-search')
+let area = document.querySelector('#area').value || 'Boston';
+const locationSearch = document.querySelector('#location-search');
 
 // Location
-const locationName = document.querySelector('#location-name')
-const country = document.querySelector('#country')
+const locationName = document.querySelector('#location-name');
+const country = document.querySelector('#country');
 
 // Temperature
-const temp = document.querySelector('#temp')
-const tempMin = document.querySelector('#temp-min')
-const tempMax = document.querySelector('#temp-max')
+const temp = document.querySelector('#temp');
+const tempMin = document.querySelector('#temp-min');
+const tempMax = document.querySelector('#temp-max');
 
 // Weather
-const condition = document.querySelector('#condition')
-const conditionDescription = document.querySelector('#condition-description')
+const condition = document.querySelector('#condition');
+const conditionDescription = document.querySelector('#condition-description');
 
 // Wind
-const windSpeed = document.querySelector('#wind-speed')
+const windSpeed = document.querySelector('#wind-speed');
 
 // Error
-const errorBox = document.querySelector('#error')
+const errorBox = document.querySelector('#error');
 
 // ============================================================
 // Get Weather Function
 // ============================================================
 
-async function getWeather (city, key, units = 'imperial') {
+async function getWeather(city, key, units = 'imperial') {
   try {
-    const r = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&APPID=${key}`)
-    const data = await r.json()
+    const r = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=${units}&APPID=${key}`
+    );
+    const data = await r.json();
 
     // Reset body class
-    document.body.classList = ''
+    document.body.classList = '';
 
     // Clear Error
-    errorBox.classList.add('dn')
+    errorBox.classList.add('dn');
 
     // Set Location Data
-    locationName.innerText = data.name || ''
-    country.innerText = data.sys.country
+    if (locationName) {
+      locationName.innerText = data.name || '';
+    }
+    if (country) {
+      country.innerText = data.sys.country;
+    }
 
     // Set Temperature Data
-    temp.innerText = Math.round(data.main.temp)
-    tempMin.innerText = Math.round(data.main.temp_min)
-    tempMax.innerText = Math.round(data.main.temp_max)
+    if (temp) {
+      temp.innerText = Math.round(data.main.temp);
+    }
+    if (tempMin) {
+      tempMin.innerText = Math.round(data.main.temp_min);
+    }
+    if (tempMax) {
+      tempMax.innerText = Math.round(data.main.temp_max);
+    }
 
     // Set Temperature Body Class
     if (data.main.temp < 45) {
-      document.body.classList.add('cold')
+      document.body.classList.add('cold');
     } else if (data.main.temp >= 45 && data.main.temp <= 75) {
-      document.body.classList.add('warm')
+      document.body.classList.add('warm');
     } else {
-      document.body.classList.add('hot')
+      document.body.classList.add('hot');
     }
 
     // Set Weather Data
-    condition.innerText = data.weather[0].main
-    conditionDescription.innerText = data.weather[0].description
-    windSpeed.innerText = Math.round(data.wind.speed)
+    if (condition) {
+      condition.innerText = data.weather[0].main;
+    }
+    if (conditionDescription) {
+      conditionDescription.innerText = data.weather[0].description;
+    }
+    if (windSpeed) {
+      windSpeed.innerText = Math.round(data.wind.speed);
+    }
 
     // Set Weather Body Class
-    document.body.classList.add(data.weather[0].main.toLowerCase())
+    document.body.classList.add(data.weather[0].main.toLowerCase());
 
     // Set Wind Body Class
     if (data.wind.speed > 10 && data.wind.speed < 20) {
-      document.body.classList.add('breezy')
+      document.body.classList.add('breezy');
     } else if (data.wind.speed >= 20) {
-      document.body.classList.add('windy')
+      document.body.classList.add('windy');
     } else {
-      document.body.classList.add('calm')
+      document.body.classList.add('calm');
     }
 
     // Log data from the API to the console
-    console.log(data)
+    console.log(data);
   } catch (e) {
-    console.error(e)
-    errorBox.classList.remove('dn')
+    console.error(e);
+    errorBox.classList.remove('dn');
   }
 }
 
@@ -98,18 +116,18 @@ async function getWeather (city, key, units = 'imperial') {
 // Listen for form submission
 // ============================================================
 
-locationSearch.addEventListener('submit', function (e) {
-  area = document.querySelector('#area').value || 'Boston'
+locationSearch.addEventListener('submit', function(e) {
+  area = document.querySelector('#area').value || 'Boston';
 
   // Run the getWeather function
-  getWeather(area, APIKEY)
+  getWeather(area, APIKEY);
 
   // Prevent the default behavior of the form
-  e.preventDefault()
-})
+  e.preventDefault();
+});
 
 // ============================================================
 // Get weather on page load
 // ============================================================
 
-getWeather(area, APIKEY)
+getWeather(area, APIKEY);
